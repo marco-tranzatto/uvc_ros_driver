@@ -809,6 +809,7 @@ void uvcROSDriver::dynamicReconfigureCallback(
 		setParam("IM_V_FLIP_CAM0", static_cast<float>(config.CAMERA_0_VFLIP));
 
 		setParam("ADIS_IMU", static_cast<float>(config.ADIS_IMU));
+		std::cout << "*************************** ADIS: " << config.ADIS_IMU << std::endl << std::endl;
 		//update camera parameters in FPGA
 		setParam("UPDATEMT9V034", 1.0f);
 
@@ -1096,7 +1097,7 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 		     (size_t)frame_size, frame->width - 16, frame->height);
 
 	sensor_msgs::fillImage(msg_vio.left_image,
-			       sensor_msgs::image_encodings::BAYER_RGGB8,//
+			       sensor_msgs::image_encodings::MONO8,//
 			       frame->height,      // height
 			       frame->width - 16,  // width
 			       frame->width - 16,  // stepSize
