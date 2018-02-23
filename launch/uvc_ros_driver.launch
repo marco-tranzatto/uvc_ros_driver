@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="flip" default="false" />     <!-- Horizontal + Vertical flip -->
-  <arg name="numberOfCameras" default="2" />
+  <arg name="numberOfCameras" default="4" />
   <arg name="primaryCamMode" default="false"/>
   <!-- upload calibration to fpga -->
   <arg name="setCalibration" default="true" />
@@ -17,6 +17,10 @@
   <!-- calibration file in folder calib -->
   <arg name="cameraConfigFile" default="/media/camera/calibration.yaml" />
 
+  <!-- Throttle image topics. -->
+  <arg name="throttle_images"    default="false"/>
+  <arg name="throttling_rate"    default="4.0"/>
+
   <!-- camera node -->
   <node pkg="uvc_ros_driver" name="uvc_camera" type="uvc_ros_driver_node" output="screen">
     <param name="flip" type="bool"  value="$(arg flip)" />
@@ -30,5 +34,40 @@
     <param name="cameraConfigFile" type="string"  value="$(arg cameraConfigFile)" />
     <rosparam command="load" file="$(find uvc_ros_driver)/params/homography_mapping.yaml" />
   </node>
+
+  <!-- throttle images -->
+  <group if="$(arg throttle_images)">
+    <node name="throttle_cam0"
+          pkg="topic_tools" type="throttle"
+          args="messages
+                uvc_camera/cam_0/image_raw
+                $(arg throttling_rate)">
+      <param name="lazy" value="false"/>
+    </node>
+
+    <node name="throttle_cam1"
+          pkg="topic_tools" type="throttle"
+          args="messages
+                uvc_camera/cam_1/image_raw
+                $(arg throttling_rate)">
+      <param name="lazy" value="false"/>
+    </node>
+
+    <node name="throttle_cam2"
+          pkg="topic_tools" type="throttle"
+          args="messages
+                uvc_camera/cam_2/image_raw
+                $(arg throttling_rate)">
+      <param name="lazy" value="false"/>
+    </node>
+
+    <node name="throttle_cam3"
+          pkg="topic_tools" type="throttle"
+          args="messages
+                uvc_camera/cam_3/image_raw
+                $(arg throttling_rate)">
+      <param name="lazy" value="false"/>
+    </node>
+  </group>
 
 </launch>
