@@ -165,7 +165,7 @@ target_link_libraries(uvc_ros_driver
   #yaml-cpp
   ${catkin_LIBRARIES}
   #${LibUVC_LIBRARIES}
-  /usr/local/lib/libuvc.so #TODO link by usign find_package
+  /usr/local/lib/x86_64-linux-gnu/libuvc.so #TODO link by usign find_package
   ${YamlCpp_LIBRARIES}
 )
 
