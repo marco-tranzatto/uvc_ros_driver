@@ -1060,10 +1060,12 @@ void uvcROSDriver::uvc_cb(uvc_frame_t *frame)
 
 			msg_vio.imu.push_back(msg_imu);
 
-			if (imu_id == 1){
-				imu1_publisher_.publish(msg_imu);
-			} else {
-				imu0_publisher_.publish(msg_imu);
+			if ((imu_msg_counter_in_frame % imu_messages_frequency_divider_) == 0) {
+				if (imu_id == 1) {
+					imu1_publisher_.publish(msg_imu);
+				} else {
+					imu0_publisher_.publish(msg_imu);
+				}
 			}
 
 			++imu_msg_counter_in_frame;

@@ -136,6 +136,9 @@ private:
 	ros::Time past_;
 	ros::Time frame_time_;
 
+	// frequency divider
+	unsigned int imu_messages_frequency_divider_ = 4; // ADIS IMU gets published at 800Hz, throttle to 200 Hz.
+
 	uint32_t time_wrapper_check_frame_ = 0;
 	uint32_t time_wrapper_check_line_ = 0;
 	// image publishers
@@ -252,6 +255,10 @@ public:
 	void setPrimaryCamMode(bool primary_camera_mode)
 	{
 		primary_camera_mode_ = primary_camera_mode;
+	};
+	void setImuMessagesFrequencyDivider(int imu_messages_frequency_divider)
+	{
+		imu_messages_frequency_divider_ = static_cast<unsigned int>(imu_messages_frequency_divider);
 	};
 	bool getUseOfDepthMap()
 	{

@@ -86,6 +86,7 @@ int main(int argc, char **argv)
 	bool flip, set_calibration, depth_map, calibration_mode, ait_msgs, primary_camera_mode;
 	int number_of_cameras;
 	std::string calibration_file_path;
+	int imuMessagesFrequencyDivider;
 	// TODO: check if parameter exist
 	nh.getParam("flip", flip);
 	nh.getParam("numberOfCameras", number_of_cameras);
@@ -95,12 +96,14 @@ int main(int argc, char **argv)
 	nh.getParam("cameraConfigFile", calibration_file_path);
 	nh.getParam("calibrationMode", calibration_mode);
 	nh.getParam("primaryCamMode", primary_camera_mode);
+	nh.getParam("imuMessagesFrequencyDivider", imuMessagesFrequencyDivider);
 
 	// set parameters
 	uvc_ros_driver.setNumberOfCameras(number_of_cameras);
 	uvc_ros_driver.setUseOFAITMsgs(ait_msgs);
 	uvc_ros_driver.setFlip(flip);
 	uvc_ros_driver.setPrimaryCamMode(primary_camera_mode);
+	uvc_ros_driver.setImuMessagesFrequencyDivider(imuMessagesFrequencyDivider);
 
 	// initialize device
 	uvc_ros_driver.initDevice();

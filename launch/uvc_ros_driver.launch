@@ -17,6 +17,9 @@
   <!-- calibration file in folder calib -->
   <arg name="cameraConfigFile" default="/media/camera/calibration.yaml" />
 
+  <!-- IMU messages frequency divider -->
+  <arg name="imuMessagesFrequencyDivider" default="4" />
+
   <!-- Throttle image topics. -->
   <arg name="throttle_images"    default="false"/>
   <arg name="throttling_rate"    default="4.0"/>
@@ -32,10 +35,11 @@
     <param name="depthMap" type="bool"  value="$(arg depthMap)" />
     <param name="cameraConfig" type="int"  value="$(arg cameraConfig)" />
     <param name="cameraConfigFile" type="string"  value="$(arg cameraConfigFile)" />
+    <param name="imuMessagesFrequencyDivider" type="int"  value="$(arg imuMessagesFrequencyDivider)" />
     <rosparam command="load" file="$(find uvc_ros_driver)/params/homography_mapping.yaml" />
   </node>
 
-  <!-- throttle images -->
+  <!-- throttle images: useful for calibration -->
   <group if="$(arg throttle_images)">
     <node name="throttle_cam0"
           pkg="topic_tools" type="throttle"
