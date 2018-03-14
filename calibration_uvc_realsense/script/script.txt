@@ -9,8 +9,8 @@
 	b.	copy output from current directory to ./out/uvc_up_camcam.yaml
 	c. **remove in case the 'throttle' string the the rostopic field**.
 
-4. Upwards Camera-IMU Calibration.
-	a.	update parameter_files/imu_adis16448 with IMU topic and frequency of camera0.
+4. Upwards UVC Camera - UVC IMU Calibration.
+	a.	update parameter_files/imu_adis16448 with IMU topic and frequency.
 	b.	rosrun kalibr kalibr_calibrate_imu_camera --cam ./out/uvc_up_camcam.yaml  --target ./parameter_files/april_6x6.yaml --imu ./parameter_files/imu_adis16448.yaml --bag ./bags/kalibr-up-uvc-2018-03-13-11-30-48.bag --time-calibration #use time-calibration to check time difference between camera and imu
 	c.	copy output to ./out/uvc_up_camchain.yaml
 	d.  copy report to ./out/report/uvc_up_camchain.pdf
@@ -22,34 +22,36 @@
 	c.	move rovio_test to ./out/rovio_filter.yaml
 	d.	# in rovio_filter.yaml set doVECalibration to false # leave it to true for now
 
-6. [As Step 3, but with forward UVC camera] - TO BE UPDATED.
-	a.	kalibr_calibrate_cameras --target ./parameter_files/april_6x6.yaml --bag BAG_PATH_CAM_CALIBRATION.bag --models pinhole-equi pinhole-equi --topics /uvc_camera/cam_2/image_raw_throttle /uvc_camera/cam_3/image_raw_throttle
-	b.	copy output from current directory to ./out/camcam_down.yaml
-	c. **remove in case the 'throttle' string the the rostopic field**.
-
-7. Maplab configuration file for UPWARDS cameras.
+6. Maplab configuration file for UPWARDS cameras.
 	a. rosrun kalibr kalibr_maplab_config --to-ncamera \
     --label upwards-config \
     --cam ./out/uvc_up_camchain.yaml
     b.	copy output from current directory to ./out/maplab_config_upwards.yaml
 
-9. [As Step 4, but with front UVC cameras] - TO BE UPDATED.
-	a. rosrun kalibr kalibr_calibrate_imu_camera --cam ./out/camcam_down.yaml  --target ./parameter_files/april_6x6.yaml --imu ./parameter_files/imu_adis16448.yaml --bag BAG_PATH_IMU_CALIBRATION.bag --time-calibration #use time-calibration to check time difference between camera and imu
-	c.	copy output to ./out/down_camchain.yaml
-	d.  copy report to ./out/report/down_camchain.pdf
-	d. [optional] if you flipped the cameras, then add "flip_camera: true" after the field "timeshift_cam_imu".
-	e. **change "cam_overlaps" with appropriate camera number**.
+7. [As Step 3, but with forward UVC camera && forward Realsense (after disabling projected path).] - FIX ME!!!
+	a.	kalibr_calibrate_cameras --target ./parameter_files/april_6x6.yaml --bag ./bags/kalibr-front-realsense-uvc-2018-03-13-16-34-10.bag --models pinhole-equi pinhole-equi --topics /uvc_camera/cam_1/image_raw /realsense/color/image_raw
+	b.	copy output from current directory to ./out/camcam_front.yaml
+	c. **remove in case the 'throttle' string the the rostopic field**.
 
-10. [Realsense intrinsics] - TODO
-	a. kalibr_calibrate_cameras --target ./parameter_files/april_6x6.yaml --bag ./bags/kalibr-front-realsense-2018-03-13-11-20-29.bag --models pinhole-equi  --topics /realsense/color/image_raw
+8. [As Step 7, but only for forward UVC camera (after disabling realsense projected path).] - TODO
+	a.	kalibr_calibrate_cameras --target ./parameter_files/april_6x6.yaml --bag ./bags/kalibr-front-realsense-uvc-2018-03-13-16-34-10.bag --models pinhole-equi --topics /uvc_camera/cam_1/image_raw
+	b.	copy output from current directory to ./out/uvc_front_camcam.yaml
+	c. **remove in case the 'throttle' string the the rostopic field**.
 
-12.	Front Camera0-Robot's Imu calibration
+9. [Forward UVC Camera - UVC IMU Calibration.] - TODO
+	a.	update parameter_files/imu_adis16448 with IMU topic and frequency.
+	b.	rosrun kalibr kalibr_calibrate_imu_camera --cam ./out/uvc_front_camcam.yaml  --target ./parameter_files/april_6x6.yaml --imu ./parameter_files/imu_adis16448.yaml --bag ./bags/kalibr-up-uvc-2018-03-13-11-30-48.bag --time-calibration #use time-calibration to check time difference between camera and imu
+	c.	copy output to ./out/uvc_front_camchain.yaml
+	d.  copy report to ./out/report/uvc_front_camchain.pdf
+	e. [optional] if you flipped the cameras, then add "flip_camera: true" after the field "timeshift_cam_imu".
+
+11.	Upwards Camera0-Robot's Imu calibration
 	a.	update parameter_files/imu_xsens_mti_100.yaml with Robot's IMU topic and frequency.
 	b.	rosrun kalibr kalibr_calibrate_imu_camera --cam ./out/uvc_up_camcam.yaml --target ./parameter_files/april_6x6.yaml --imu ./parameter_files/imu_xsens_mti_100.yaml --bag ./bags/kalibr-up-uvc-2018-03-13-11-30-48.bag --time-calibration #use time-calibration to check time difference between camera imu and robot's imu - IN CASE OF ERROR ADD '--timeoffset-padding 0.1'
 	c.	copy output to ./out/camchain_visensor_robotimu.yaml
 
-13. MSF Vision for Camera0
+12. MSF Vision for Camera0 (Upwards)
 	a.	rosrun kalibr kalibr_msf_config --viimu ./out/uvc_up_camchain.yaml --mavimu ./out/camchain_visensor_robotimu.yaml --out ./out/msf_parameters_vision.yaml
 	b. remember in this file the frames are: I == Robot's IMU; C == Sensor's IMU.
 
-14. Update and run "tsif_external_pose_calibration".
+13. Update and run "tsif_external_pose_calibration".
